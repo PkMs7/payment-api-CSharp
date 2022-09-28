@@ -21,3 +21,8 @@
   - Data
   - Produtos
   - Status
+    - Aguardando pagamento
+    - Pagamento aprovado
+    - Enviado para transportadora
+    - Entregue
+    - Cancelada

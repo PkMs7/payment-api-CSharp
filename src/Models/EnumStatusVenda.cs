@@ -6,6 +6,6 @@ namespace teste_payment_api.src.Models
             PagamentoAprovado,
             EnviadoParaTransportadora,
             Entregue,
-            Cacelada
+            Cancelada
     }
 }
