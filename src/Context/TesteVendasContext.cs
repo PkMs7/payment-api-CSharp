@@ -10,5 +10,6 @@ namespace teste_payment_api.src.Context
         }
 
         public DbSet<Venda> Vendas { get; set; }
+        public DbSet<Vendedor> Vendedores { get; set; }
     }
 }

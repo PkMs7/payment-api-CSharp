@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using teste_payment_api.src.Context;
 using teste_payment_api.src.Models;
+using System.Text.Json;
 
 namespace teste_payment_api.src.Controllers
 {
@@ -19,11 +20,21 @@ namespace teste_payment_api.src.Controllers
         [HttpPost("CadastrarVenda")]
         public IActionResult AdicionarVenda(Venda venda){
 
-            
-            _context.Add(venda);
-            _context.SaveChanges();
+                // Status 0 = AguardandoPagamento conforme classe EnumStatusVenda
+                if (venda.StatusVenda == 0){
 
-            return Ok(venda);
+                    _context.Add(venda);
+                    _context.SaveChanges();
+
+                    return Ok(venda);
+
+                } else {
+                    
+                    Console.WriteLine($"O status da venda só pode ser 'Aguardando Pagamento' (code: 0)");
+                    return NotFound();
+
+                }
+
         }
 
         [HttpGet("ObterVenda/{id}")]
@@ -35,7 +46,7 @@ namespace teste_payment_api.src.Controllers
         }
 
         [HttpPut("AtualizarStatus/{StatusVenda}")]
-        public IActionResult Atualizar(int id, EnumStatusVenda statusVenda){
+        public IActionResult Atualizar(int id, Venda venda){
 
             var vendaBanco = _context.Vendas.Find(id);
             
@@ -44,8 +55,6 @@ namespace teste_payment_api.src.Controllers
                 return NotFound();
 
             }
-
-            vendaBanco.StatusVenda = statusVenda;
 
             _context.Vendas.Update(vendaBanco);
             _context.SaveChanges();

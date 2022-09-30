@@ -10,7 +10,7 @@ namespace testes.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Vendedor",
+                name: "Vendedores",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -22,7 +22,7 @@ namespace testes.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vendedor", x => x.Id);
+                    table.PrimaryKey("PK_Vendedores", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,9 +40,9 @@ namespace testes.Migrations
                 {
                     table.PrimaryKey("PK_Vendas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vendas_Vendedor_DadosVendedorId",
+                        name: "FK_Vendas_Vendedores_DadosVendedorId",
                         column: x => x.DadosVendedorId,
-                        principalTable: "Vendedor",
+                        principalTable: "Vendedores",
                         principalColumn: "Id");
                 });
 
@@ -58,7 +58,7 @@ namespace testes.Migrations
                 name: "Vendas");
 
             migrationBuilder.DropTable(
-                name: "Vendedor");
+                name: "Vendedores");
         }
     }
 }

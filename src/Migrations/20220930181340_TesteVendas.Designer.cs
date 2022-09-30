@@ -12,7 +12,7 @@ using teste_payment_api.src.Context;
 namespace testes.Migrations
 {
     [DbContext(typeof(TesteVendasContext))]
-    [Migration("20220928151722_TesteVendas")]
+    [Migration("20220930181340_TesteVendas")]
     partial class TesteVendas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,7 +73,7 @@ namespace testes.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vendedor");
+                    b.ToTable("Vendedores");
                 });
 
             modelBuilder.Entity("teste_payment_api.src.Models.Venda", b =>

@@ -71,7 +71,7 @@ namespace testes.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vendedor");
+                    b.ToTable("Vendedores");
                 });
 
             modelBuilder.Entity("teste_payment_api.src.Models.Venda", b =>
