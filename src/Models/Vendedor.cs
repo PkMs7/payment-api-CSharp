@@ -7,6 +7,6 @@ namespace teste_payment_api.src.Models
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Telefone { get; set; }
-        
+        public List<Venda> Vendas { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using teste_payment_api.src.Context;
 namespace testes.Migrations
 {
     [DbContext(typeof(TesteVendasContext))]
-    [Migration("20220930181340_TesteVendas")]
+    [Migration("20221004194020_TesteVendas")]
     partial class TesteVendas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,9 +32,6 @@ namespace testes.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("DadosVendedorId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
@@ -44,9 +41,12 @@ namespace testes.Migrations
                     b.Property<int>("StatusVenda")
                         .HasColumnType("int");
 
+                    b.Property<int>("VendedorId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("DadosVendedorId");
+                    b.HasIndex("VendedorId");
 
                     b.ToTable("Vendas");
                 });
@@ -78,11 +78,16 @@ namespace testes.Migrations
 
             modelBuilder.Entity("teste_payment_api.src.Models.Venda", b =>
                 {
-                    b.HasOne("teste_payment_api.src.Models.Vendedor", "DadosVendedor")
-                        .WithMany()
-                        .HasForeignKey("DadosVendedorId");
+                    b.HasOne("teste_payment_api.src.Models.Vendedor", null)
+                        .WithMany("Vendas")
+                        .HasForeignKey("VendedorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Navigation("DadosVendedor");
+            modelBuilder.Entity("teste_payment_api.src.Models.Vendedor", b =>
+                {
+                    b.Navigation("Vendas");
                 });
 #pragma warning restore 612, 618
         }

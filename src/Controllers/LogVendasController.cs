@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using teste_payment_api.src.Context;
 using teste_payment_api.src.Models;
-using System.Text.Json;
 
 namespace teste_payment_api.src.Controllers
 {
@@ -18,22 +17,19 @@ namespace teste_payment_api.src.Controllers
         }
 
         [HttpPost("CadastrarVenda")]
-        public IActionResult AdicionarVenda(Venda venda){
+        public IActionResult AdicionarVenda(Vendedor venda){
 
-                // Status 0 = AguardandoPagamento conforme classe EnumStatusVenda
-                if (venda.StatusVenda == 0){
+            var produtos = venda.Vendas[0].ProdutosVendidos;
 
-                    _context.Add(venda);
-                    _context.SaveChanges();
+            if(produtos == ""){
+                Console.WriteLine("Deve ser inserido ao menos um produto na venda");
+                return NotFound();
+            }
+            
+            _context.Add(venda);
+            _context.SaveChanges();
 
-                    return Ok(venda);
-
-                } else {
-                    
-                    Console.WriteLine($"O status da venda só pode ser 'Aguardando Pagamento' (code: 0)");
-                    return NotFound();
-
-                }
+            return Ok(venda);
 
         }
 
@@ -42,11 +38,16 @@ namespace teste_payment_api.src.Controllers
 
             var vendaBanco = _context.Vendas.Find(id);
 
+            if(vendaBanco == null){
+                return NotFound();
+            }
+
             return Ok(vendaBanco);
+
         }
 
-        [HttpPut("AtualizarStatus/{StatusVenda}")]
-        public IActionResult Atualizar(int id, Venda venda){
+        [HttpPut("AtualizarStatus/{id}")]
+        public IActionResult Atualizar(int id, Venda codigoStatusVenda){
 
             var vendaBanco = _context.Vendas.Find(id);
             
@@ -56,11 +57,37 @@ namespace teste_payment_api.src.Controllers
 
             }
 
-            _context.Vendas.Update(vendaBanco);
-            _context.SaveChanges();
+            switch (vendaBanco.StatusVenda)
+            {
+                case (EnumStatusVenda)0:
+                    vendaBanco.StatusVenda = (EnumStatusVenda)codigoStatusVenda.StatusVenda;
+                    if(vendaBanco.StatusVenda == (EnumStatusVenda)1 || vendaBanco.StatusVenda == (EnumStatusVenda)4){
+                        _context.Vendas.Update(vendaBanco);
+                        _context.SaveChanges();
+                        return Ok(vendaBanco);
+                    } else {
+                        return NotFound();
+                    }
 
+                case (EnumStatusVenda)1:
+                    vendaBanco.StatusVenda = (EnumStatusVenda)codigoStatusVenda.StatusVenda;
+                    if(vendaBanco.StatusVenda == (EnumStatusVenda)2 || vendaBanco.StatusVenda == (EnumStatusVenda)4){
+                        _context.Vendas.Update(vendaBanco);
+                        _context.SaveChanges();
+                        return Ok(vendaBanco);
+                    } else {
+                        return NotFound();
+                    }
 
-            return Ok(vendaBanco);
+                case (EnumStatusVenda)2:
+                        vendaBanco.StatusVenda = (EnumStatusVenda)3;
+                        _context.Vendas.Update(vendaBanco);
+                        _context.SaveChanges();
+                        return Ok(vendaBanco);
+
+                default:
+                    return NotFound();
+            }
 
         }
     }

@@ -31,25 +31,26 @@ namespace testes.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DadosVendedorId = table.Column<int>(type: "int", nullable: true),
-                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    VendedorId = table.Column<int>(type: "int", nullable: false),
                     ProdutosVendidos = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StatusVenda = table.Column<int>(type: "int", nullable: false)
+                    StatusVenda = table.Column<int>(type: "int", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vendas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vendas_Vendedores_DadosVendedorId",
-                        column: x => x.DadosVendedorId,
+                        name: "FK_Vendas_Vendedores_VendedorId",
+                        column: x => x.VendedorId,
                         principalTable: "Vendedores",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vendas_DadosVendedorId",
+                name: "IX_Vendas_VendedorId",
                 table: "Vendas",
-                column: "DadosVendedorId");
+                column: "VendedorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
